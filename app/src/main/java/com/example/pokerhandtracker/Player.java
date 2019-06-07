@@ -10,10 +10,7 @@ public class Player {
     int amountThisStreet = 0;
     boolean hasActed = false;
 
-    List<Action> street1Actions = new ArrayList<>();
-    List<Action> street2Actions = new ArrayList<>();;
-    List<Action> street3Actions = new ArrayList<>();;
-    List<Action> street4Actions = new ArrayList<>();;
+    List<Action>[] actions = (ArrayList<Action>[]) new ArrayList[4];
 
     public Player(String name, int chips) {
         this.name = name;
