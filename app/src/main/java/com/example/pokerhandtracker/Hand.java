@@ -1,12 +1,18 @@
 package com.example.pokerhandtracker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Hand {
     List<Player> playersInHand;
     int currentPlayer = 3;
-    int pot = 15;
-    int currentBet = 10;
+
+    int smallBlind = 5; //hardcoded
+    int bigBlind = 10;
+
+    List<Pot> pots = new ArrayList<>();
+    int prevRaise = 0;
+    int currentBet = bigBlind;
     int street = 0;
 
     String flop = "";
@@ -18,10 +24,13 @@ public class Hand {
 
     public Hand(List<Player> playersInHand) {
         this.playersInHand = playersInHand;
-        playersInHand.get(1).amountThisStreet = 5;
+
+        playersInHand.get(1).amountThisStreet = smallBlind;
         playersInHand.get(1).chips -= 5;
-        playersInHand.get(2).amountThisStreet = 10;
-        playersInHand.get(2).chips -= 10;
+        playersInHand.get(2).amountThisStreet = bigBlind;
+        playersInHand.get(2).chips -= bigBlind;
+        pots.add(new Pot(playersInHand, smallBlind + bigBlind));
+
         for (Player player : this.playersInHand) {
             player.hasActed = false;
         }
@@ -29,40 +38,57 @@ public class Hand {
 
     public void checkFold() {
         Player player = playersInHand.get(currentPlayer);
-        cyclePlayer();
-        //Big blind preflop check
-        if (!(player.amountThisStreet == currentBet && !player.hasActed)) {
-            if (currentBet > 0) {
-                playersInHand.remove(player);
-                if (playersInHand.size() == 1) {
-                    currentPlayer = 0;
-                }
-                if (currentPlayer != 0) { //currentPlayer already cycled
-                    currentPlayer--;
-                }
-            }
-        }
-        player.hasActed = true;
-        checkNoMoreAction();
-        checkNoMorePlayers();
+
+        
     }
+
+//    public void checkFold() {
+//        Player player = playersInHand.get(currentPlayer);
+//        cyclePlayer();
+//        //Big blind preflop check
+//        if (!(player.amountThisStreet == bigBlind && !player.hasActed)) {
+//            if (currentBet > 0) {
+//                playersInHand.remove(player);
+//                if (playersInHand.size() == 1) {
+//                    currentPlayer = 0;
+//                }
+//                if (currentPlayer != 0) { //currentPlayer already cycled
+//                    currentPlayer--;
+//                }
+//            }
+//        }
+//        player.hasActed = true;
+//        checkNoMoreAction();
+//        checkNoMorePlayers();
+//    }
 
     public boolean call() {
         if (currentBet == 0) {
             return false;
+        }
+
+        Player player = playersInHand.get(currentPlayer);
+
+        if (player.chips - (currentBet - player.amountThisStreet) < 0) {
+            allIn(player);
         } else {
-            Player player = playersInHand.get(currentPlayer);
             player.chips -= (currentBet - player.amountThisStreet);
-            pot += (currentBet - player.amountThisStreet);
+            addToPot(currentBet - player.amountThisStreet);
             player.amountThisStreet = currentBet;
             player.hasActed = true;
             cyclePlayer();
             checkNoMoreAction();
-            return true;
         }
+
+        return true;
     }
 
-    public void betRaise(int amount) {
+    public boolean betRaise(int amount) {
+        if (!checkValidBet(amount)) {
+            return false;
+        }
+
+        prevRaise = amount - currentBet;
         Player player = playersInHand.get(currentPlayer);
         currentBet = amount;
         player.chips -= (amount - player.amountThisStreet);
@@ -70,6 +96,31 @@ public class Hand {
         player.amountThisStreet = currentBet;
         player.hasActed = true;
         cyclePlayer();
+
+        return true;
+    }
+
+    private void addToPot(int amount) {
+        pots.get(pots.size() - 1).potSize += amount;
+    }
+
+    private void allIn(Player player) {
+
+    }
+
+    private boolean checkValidBet(int amount) {
+        Player player = playersInHand.get(currentPlayer);
+        //min raise
+        if (amount - currentBet < prevRaise) {
+            return false;
+        }
+
+        //not enough chips
+        if (amount - player.amountThisStreet > player.chips) {
+            return false;
+        }
+
+        return true;
     }
 
     private void cyclePlayer() {
