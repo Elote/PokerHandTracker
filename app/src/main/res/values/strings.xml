@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Poker Hand Tracker</string>
+
+    <!-- Seat Numbers -->
+    <string name="seat1Label">Seat 1</string>
+    <string name="seat2Label">Seat 2</string>
+    <string name="seat3Label">Seat 3</string>
+    <string name="seat4Label">Seat 4</string>
+    <string name="seat5Label">Seat 5</string>
+    <string name="seat6Label">Seat 6</string>
+    <string name="seat7Label">Seat 7</string>
+    <string name="seat8Label">Seat 8</string>
+    <string name="seat9Label">Seat 9</string>
+
+    <string name="name">Name</string>
+    <string name="stack">Stack</string>
+
+</resources>

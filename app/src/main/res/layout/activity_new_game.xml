@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewGameActivity">
+
+    <Button
+        android:id="@+id/nextNewGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.93" />
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="288dp"
+        android:layout_height="411dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/nextNewGame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.288"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/seat1Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="10sp"
+                android:text="@string/seat1Label"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/seat1Name"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10sp"
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName"
+                android:text="Elliot Seat 1" />
+
+            <EditText
+                android:id="@+id/seat1Stack"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Stack"
+                android:inputType="number"
+                android:text="2000" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/seat2Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="10sp"
+                android:text="@string/seat2Label"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/seat2Name"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10sp"
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName"
+                android:text="Sam Seat 2" />
+
+            <EditText
+                android:id="@+id/seat2Stack"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/stack"
+                android:inputType="number"
+                android:text="2000" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/seat3Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="10sp"
+                android:text="@string/seat3Label"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/seat3Name"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10sp"
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName"
+                android:text="Ben Seat 3" />
+
+            <EditText
+                android:id="@+id/seat3Stack"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/stack"
+                android:inputType="number"
+                android:text="2000" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/seat4Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="10sp"
+                android:text="@string/seat4Label"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/seat4Name"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10sp"
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName"
+                android:text="Carson Seat 4" />
+
+            <EditText
+                android:id="@+id/seat4Stack"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/stack"
+                android:inputType="number"
+                android:text="2000" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/seat5Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="10sp"
+                android:text="@string/seat5Label"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/seat5Name"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10sp"
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/seat5Stack"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/stack"
+                android:inputType="number" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/seat6Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="10sp"
+                android:text="@string/seat6Label"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/seat6Name"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10sp"
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/seat6Stack"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/stack"
+                android:inputType="number" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/seat7Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="10sp"
+                android:text="@string/seat7Label"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/seat7Name"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10sp"
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/seat7Stack"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/stack"
+                android:inputType="number" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/seat8Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="10sp"
+                android:text="@string/seat8Label"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/seat8Name"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10sp"
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/seat8Stack"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/stack"
+                android:inputType="number" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="284dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/seat9Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="10sp"
+                android:text="@string/seat9Label"
+                android:textSize="25sp" />
+
+            <EditText
+                android:id="@+id/seat9Name"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10sp"
+                android:ems="10"
+                android:hint="@string/name"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/seat9Stack"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/stack"
+                android:inputType="number" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <RadioGroup
+        android:id="@+id/newGameButtonGroup"
+        android:layout_width="51dp"
+        android:layout_height="410dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="74dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="173dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tableLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/seat1Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:tag="1" />
+
+        <RadioButton
+            android:id="@+id/seat2Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="2" />
+
+        <RadioButton
+            android:id="@+id/seat3Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="3" />
+
+        <RadioButton
+            android:id="@+id/seat4Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="4" />
+
+        <RadioButton
+            android:id="@+id/seat5Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="5" />
+
+        <RadioButton
+            android:id="@+id/seat6Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="6" />
+
+        <RadioButton
+            android:id="@+id/seat7Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:id="@+id/seat8Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="8" />
+
+        <RadioButton
+            android:id="@+id/seat9Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="9" />
+    </RadioGroup>
+
+</android.support.constraint.ConstraintLayout>
