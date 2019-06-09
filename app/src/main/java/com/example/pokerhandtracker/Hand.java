@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class Hand {
     List<Player> playersInHand;
+    int allInPlayers = 0;
     int currentPlayer = 3;
 
     int smallBlind = 5; //hardcoded
@@ -36,7 +37,7 @@ public class Hand {
         //initialise pot
         Pot mainPot = new Pot();
         for (Player p : playersInHand) {
-                mainPot.playerContribution.put(p, 0);
+            mainPot.playerContribution.put(p, 0);
         }
         mainPot.playerContribution.put(playersInHand.get(1), smallBlind);
         mainPot.playerContribution.put(playersInHand.get(2), bigBlind);
@@ -48,19 +49,21 @@ public class Hand {
 
         cyclePlayer();
 
-        if (!(player.amountThisStreet == bigBlind && actions.isEmpty())) {
-            if (currentBet > 0) {
-                actions.add(new Fold(player));
-                playersInHand.remove(player);
-                if (playersInHand.size() == 1) {
-                    currentPlayer = 0;
-                }
-                if (currentPlayer != 0) {
-                    currentPlayer--;
-                }
-            } else {
-                actions.add(new Check(player));
+        if (actions.size() == playersInHand.size() - 1 && currentBet == bigBlind) {
+            actions.add(new Check(player));
+        } else if (currentBet > 0) {
+            actions.add(new Fold(player));
+            playersInHand.remove(player);
+
+            if (playersInHand.size() == 1) {
+                currentPlayer = 0;
             }
+
+            if (currentPlayer != 0) {
+                currentPlayer--;
+            }
+        } else {
+            actions.add(new Check(player));
         }
 
         checkNoMoreAction();
@@ -89,7 +92,7 @@ public class Hand {
     }
 
     public boolean betRaise(int amount) {
-        if (checkValidBet(amount)) {
+        if (!checkValidBet(amount)) {
             return false;
         }
 
@@ -211,11 +214,17 @@ public class Hand {
         int checkCount = 0;
         int callCount = 0;
         int callsRequired = playersInHand.size() - 1;
-        int allInPlayers = 0;
+        int allInPlayers = this.allInPlayers;
         boolean aggressorAllIn = false;
+        boolean cannotLimp = true;
+
+        if (street == 0) {
+            cannotLimp = false;
+        }
 
         for (Action action : actions) {
             if (action instanceof Bet) {
+                cannotLimp = true;
                 if (((Bet) action).allIn) {
                     if (aggressorAllIn) {
                         allInPlayers++;
@@ -237,10 +246,21 @@ public class Hand {
                 checkCount++;
             } else if (action instanceof Fold) {
                 callsRequired--;
+                if (action != actions.get(actions.size() - 1)) {
+                    callsRequired++;
+                    if (playersInHand.get(playersInHand.size() - 1) != ((Fold) action).player) {
+                        return;
+                    }
+                }
             }
 
-            if (callCount == callsRequired - allInPlayers || checkCount == callsRequired + 1 - allInPlayers) {
+            if (!cannotLimp) {
+                if (callCount == callsRequired && checkCount == 1) {
+                    nextStreet();
+                }
+            } else if (callCount == callsRequired - allInPlayers || checkCount == callsRequired + 1 - allInPlayers) {
                 nextStreet();
+                this.allInPlayers = allInPlayers;
             }
         }
     }
