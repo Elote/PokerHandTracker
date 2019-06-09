@@ -13,6 +13,7 @@ public class Hand {
     List<Pot> pots = new ArrayList<>();
     int prevRaise = 0;
     int currentBet = bigBlind;
+    List<Action> actions = new ArrayList<>();
     int street = 0;
 
     String flop = "";
@@ -25,6 +26,7 @@ public class Hand {
     public Hand(List<Player> playersInHand) {
         this.playersInHand = playersInHand;
 
+        playersInHand.get(0).isButton = true;
         playersInHand.get(1).amountThisStreet = smallBlind;
         playersInHand.get(1).chips -= 5;
         playersInHand.get(2).amountThisStreet = bigBlind;
@@ -37,9 +39,9 @@ public class Hand {
 
         cyclePlayer();
 
-        if (!(player.amountThisStreet == bigBlind && player.actions[street].isEmpty())){
+        if (!(player.amountThisStreet == bigBlind && player.actions[street].isEmpty())) {
             if (currentBet > 0) {
-                player.actions[street].add(new Fold());
+                player.actions[street].add(new Fold(player));
                 playersInHand.remove(player);
                 if (playersInHand.size() == 1) {
                     currentPlayer = 0;
@@ -48,7 +50,7 @@ public class Hand {
                     currentPlayer--;
                 }
             } else {
-                player.actions[street].add(new Check());
+                player.actions[street].add(new Check(player));
             }
         }
 
@@ -63,7 +65,7 @@ public class Hand {
 
         Player player = playersInHand.get(currentPlayer);
 
-        player.actions[street].add(new Call());
+        player.actions[street].add(new Call(player));
         cyclePlayer();
         checkNoMoreAction();
 
@@ -97,9 +99,9 @@ public class Hand {
 
         Player player = playersInHand.get(currentPlayer);
 
-        player.actions[street].add(new Bet(amount));
+        player.actions[street].add(new Bet(amount, player));
         cyclePlayer();
-        
+
         return true;
     }
 
@@ -124,6 +126,44 @@ public class Hand {
     }
 
     private void allIn(Player player) {
+
+    }
+
+    private void computeStreet() {
+        Pot mainPot = new Pot(smallBlind + bigBlind);
+        mainPot.betAmount = 10;
+
+        for (int i = 0; i < actions.size(); i++) {
+            Action action = actions.get(i);
+            if (action instanceof Bet) {
+                //Player player = ((Bet) action).player;
+                Pot lastPot = pots.get(pots.size() - 1);
+                lastPot.potSize += ((Bet) action).amount;
+                lastPot.betAmount = (((Bet) action).amount - lastPot.betAmount);
+            } else if (action instanceof Call) {
+                Player player = ((Call) action).player;
+                Pot lastPot = pots.get(pots.size() - 1);
+                Pot sidePot;
+
+                if (((Call) action).player.chips > lastPot.betAmount) { //no sidepot needed
+                    lastPot.potSize += lastPot.betAmount;
+                    lastPot.players.add(player);
+                } else { //sidepot needed
+                    if (lastPot.players.contains(player)) { //if player is already in pot
+                        lastPot.potSize -= ((lastPot.betAmount - player.chips) * lastPot.players.size()) - 1;
+                        sidePot = new Pot((lastPot.betAmount - player.chips) * lastPot.players.size() - 1);
+                    } else { //if player is entering pot
+                        lastPot.potSize -= ((lastPot.betAmount - player.chips) * lastPot.players.size());
+                        lastPot.players.add(player);
+                        sidePot = new Pot((lastPot.betAmount - player.chips) * lastPot.players.size());
+                    }
+                }
+            }
+        }
+    }
+
+    private int numActions() {
+        int actionCount = 0;
 
     }
 
@@ -177,14 +217,10 @@ public class Hand {
             return;
         }
 
-        for (Player player : playersInHand) {
-            //button still in hand
-            if (player.isButton) {
-                currentPlayer = 1;
-                break;
-            } else {
-                currentPlayer = 0;
-            }
+        if (playersInHand.get(0).isButton) {
+            currentPlayer = 1;
+        } else {
+            currentPlayer = 0;
         }
         currentBet = 0;
     }

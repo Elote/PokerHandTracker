@@ -8,7 +8,6 @@ public class Player {
     int chips;
     boolean isButton = false;
     int amountThisStreet = 0;
-    boolean hasActed = false;
 
     List<Action>[] actions = (ArrayList<Action>[]) new ArrayList[4];
 
