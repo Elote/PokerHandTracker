@@ -74,32 +74,19 @@ public class Hand {
 
         Player player = playersInHand.get(currentPlayer);
 
-        actions.add(new Call(player));
+        if (currentBet - player.amountThisStreet > player.chips) {
+            player.amountThisStreet += player.chips;
+            actions.add(new Call(player, true));
+        } else {
+            player.amountThisStreet = currentBet;
+            actions.add(new Call(player, false));
+        }
+
         cyclePlayer();
         checkNoMoreAction();
 
         return true;
     }
-
-//    public boolean call() {
-//        if (currentBet == 0) {
-//            return false;
-//        }
-//
-//        Player player = playersInHand.get(currentPlayer);
-//
-//        if (player.chips - (currentBet - player.amountThisStreet) < 0) {
-//            allIn(player);
-//        } else {
-//            player.chips -= (currentBet - player.amountThisStreet);
-//            addToPot(currentBet - player.amountThisStreet);
-//            player.amountThisStreet = currentBet;
-//            cyclePlayer();
-//            checkNoMoreAction();
-//        }
-//
-//        return true;
-//    }
 
     public boolean betRaise(int amount) {
         if (checkValidBet(amount)) {
@@ -108,27 +95,18 @@ public class Hand {
 
         Player player = playersInHand.get(currentPlayer);
 
-        actions.add(new Bet(amount, player));
+        currentBet = amount;
+        player.amountThisStreet = amount;
+        if (player.amountThisStreet - player.chips == 0) {
+            actions.add(new Bet(amount, player, true));
+        } else {
+            actions.add(new Bet(amount, player, false));
+        }
+
         cyclePlayer();
 
         return true;
     }
-
-//    public boolean betRaise(int amount) {
-//        if (!checkValidBet(amount)) {
-//            return false;
-//        }
-//
-//        prevRaise = amount - currentBet;
-//        Player player = playersInHand.get(currentPlayer);
-//        currentBet = amount;
-//        player.chips -= (amount - player.amountThisStreet);
-//        pot += (amount - player.amountThisStreet);
-//        player.amountThisStreet = currentBet;
-//        cyclePlayer();
-//
-//        return true;
-//    }
 
     private void computeStreet() {
         for (int i = 0; i < actions.size(); i++) {
@@ -230,20 +208,46 @@ public class Hand {
     }
 
     private void checkNoMoreAction() {
-        int streetBet = playersInHand.get(0).amountThisStreet;
-        for (Player player : playersInHand) {
-            if (player.amountThisStreet != streetBet) {
-                return;
+        int checkCount = 0;
+        int callCount = 0;
+        int callsRequired = playersInHand.size() - 1;
+        int allInPlayers = 0;
+        boolean aggressorAllIn = false;
+
+        for (Action action : actions) {
+            if (action instanceof Bet) {
+                if (((Bet) action).allIn) {
+                    if (aggressorAllIn) {
+                        allInPlayers++;
+                    } else {
+                        aggressorAllIn = true;
+                    }
+                } else if (aggressorAllIn) {
+                    aggressorAllIn = false;
+                    allInPlayers++;
+                }
+                callCount = 0;
+            } else if (action instanceof Call) {
+                if (((Call) action).allIn) {
+                    allInPlayers++;
+                } else {
+                    callCount++;
+                }
+            } else if (action instanceof Check) {
+                checkCount++;
+            } else if (action instanceof Fold) {
+                callsRequired--;
+            }
+
+            if (callCount == callsRequired - allInPlayers || checkCount == callsRequired + 1 - allInPlayers) {
+                nextStreet();
             }
         }
-
-        nextStreet();
     }
 
     private void checkNoMorePlayers() {
         if (playersInHand.size() == 1) {
             MainActivity.game.endHand();
-            System.out.println("made");
         }
     }
 
