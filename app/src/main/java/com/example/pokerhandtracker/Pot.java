@@ -1,15 +1,12 @@
 package com.example.pokerhandtracker;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Pot {
-    List<Player> players = new ArrayList<>();
-    int potSize = 0;
-    int betAmount = 0;
+    Map<Player, Integer> playerContribution = new HashMap<>();
 
-    public Pot(int potSize) {
-        this.potSize = potSize;
-        this.betAmount = potSize;
+    public int getTotal() {
+        return playerContribution.get(0) * playerContribution.size();
     }
 }

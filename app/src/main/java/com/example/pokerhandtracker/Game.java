@@ -29,9 +29,9 @@ public class Game {
         return orderedPlayers;
     }
 
-    public void pushPot(Player player) {
+    public void pushPot(Player player, int potNum) {
         prevHands.get(prevHands.size() - 1).winner = player;
-        player.chips += prevHands.get(prevHands.size() - 1).pot;
+        player.chips += prevHands.get(prevHands.size() - 1).pots.get(potNum).getTotal();
     }
 
     public void endHand() {

@@ -2,6 +2,7 @@ package com.example.pokerhandtracker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Hand {
     List<Player> playersInHand;
@@ -31,7 +32,15 @@ public class Hand {
         playersInHand.get(1).chips -= 5;
         playersInHand.get(2).amountThisStreet = bigBlind;
         playersInHand.get(2).chips -= bigBlind;
-        pots.add(new Pot(playersInHand, smallBlind + bigBlind));
+
+        //initialise pot
+        Pot mainPot = new Pot();
+        for (Player p : playersInHand) {
+                mainPot.playerContribution.put(p, 0);
+        }
+        mainPot.playerContribution.put(playersInHand.get(1), smallBlind);
+        mainPot.playerContribution.put(playersInHand.get(2), bigBlind);
+        pots.add(mainPot);
     }
 
     public void checkFold() {
@@ -39,9 +48,9 @@ public class Hand {
 
         cyclePlayer();
 
-        if (!(player.amountThisStreet == bigBlind && player.actions[street].isEmpty())) {
+        if (!(player.amountThisStreet == bigBlind && actions.isEmpty())) {
             if (currentBet > 0) {
-                player.actions[street].add(new Fold(player));
+                actions.add(new Fold(player));
                 playersInHand.remove(player);
                 if (playersInHand.size() == 1) {
                     currentPlayer = 0;
@@ -50,7 +59,7 @@ public class Hand {
                     currentPlayer--;
                 }
             } else {
-                player.actions[street].add(new Check(player));
+                actions.add(new Check(player));
             }
         }
 
@@ -65,7 +74,7 @@ public class Hand {
 
         Player player = playersInHand.get(currentPlayer);
 
-        player.actions[street].add(new Call(player));
+        actions.add(new Call(player));
         cyclePlayer();
         checkNoMoreAction();
 
@@ -99,7 +108,7 @@ public class Hand {
 
         Player player = playersInHand.get(currentPlayer);
 
-        player.actions[street].add(new Bet(amount, player));
+        actions.add(new Bet(amount, player));
         cyclePlayer();
 
         return true;
@@ -121,50 +130,80 @@ public class Hand {
 //        return true;
 //    }
 
-    private void addToPot(int amount) {
-        pots.get(pots.size() - 1).potSize += amount;
-    }
-
-    private void allIn(Player player) {
-
-    }
-
     private void computeStreet() {
-        Pot mainPot = new Pot(smallBlind + bigBlind);
-        mainPot.betAmount = 10;
-
         for (int i = 0; i < actions.size(); i++) {
             Action action = actions.get(i);
+            Pot lastPot = pots.get(pots.size() - 1);
+            Map<Player, Integer> betMap = lastPot.playerContribution;
+
             if (action instanceof Bet) {
-                //Player player = ((Bet) action).player;
-                Pot lastPot = pots.get(pots.size() - 1);
-                lastPot.potSize += ((Bet) action).amount;
-                lastPot.betAmount = (((Bet) action).amount - lastPot.betAmount);
+                Player player = ((Bet) action).player;
+
+                betMap.put(player, ((Bet) action).amount);
             } else if (action instanceof Call) {
                 Player player = ((Call) action).player;
-                Pot lastPot = pots.get(pots.size() - 1);
-                Pot sidePot;
 
-                if (((Call) action).player.chips > lastPot.betAmount) { //no sidepot needed
-                    lastPot.potSize += lastPot.betAmount;
-                    lastPot.players.add(player);
-                } else { //sidepot needed
-                    if (lastPot.players.contains(player)) { //if player is already in pot
-                        lastPot.potSize -= ((lastPot.betAmount - player.chips) * lastPot.players.size()) - 1;
-                        sidePot = new Pot((lastPot.betAmount - player.chips) * lastPot.players.size() - 1);
-                    } else { //if player is entering pot
-                        lastPot.potSize -= ((lastPot.betAmount - player.chips) * lastPot.players.size());
-                        lastPot.players.add(player);
-                        sidePot = new Pot((lastPot.betAmount - player.chips) * lastPot.players.size());
+                int highestContribution = 0;
+                for (Player p : lastPot.playerContribution.keySet()) {
+                    if (betMap.get(p) > highestContribution) {
+                        highestContribution = betMap.get(p);
                     }
                 }
+
+                if (player.chips > highestContribution) {
+                    betMap.put(player, highestContribution);
+                } else {
+                    betMap.put(player, player.chips);
+                }
+            } else if (action instanceof Check || action instanceof Fold) {
+                return;
             }
         }
+
+        //create sidepots
+        for (int i = pots.size() - 1; i < pots.size(); i++) {
+            Pot mainPot = pots.get(i);
+            if (!checkPotIsEqual(mainPot)) {
+                Pot sidePot = new Pot();
+                Player lowestContributor = getLowestContribution(mainPot);
+
+                for (Player player : mainPot.playerContribution.keySet()) {
+                    if (player != lowestContributor) {
+                        sidePot.playerContribution.put(player, mainPot.playerContribution.get(player) - mainPot.playerContribution.get(lowestContributor));
+                    }
+                }
+
+                for (Player player : mainPot.playerContribution.keySet()) {
+                    mainPot.playerContribution.put(player, mainPot.playerContribution.get(lowestContributor));
+                }
+
+                pots.add(sidePot);
+            }
+        }
+
+        actions.clear();
     }
 
-    private int numActions() {
-        int actionCount = 0;
+    private boolean checkPotIsEqual(Pot pot) {
+        int amount = pot.playerContribution.get(0);
+        for (Player p : pot.playerContribution.keySet()) {
+            if (pot.playerContribution.get(p) != amount) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    private Player getLowestContribution(Pot pot) {
+        Player lowestContributor = null;
+        int lowestContribution = Integer.MAX_VALUE;
+        for (Player p : pot.playerContribution.keySet()) {
+            if (lowestContribution > pot.playerContribution.get(p)) {
+                lowestContribution = pot.playerContribution.get(p);
+                lowestContributor = p;
+            }
+        }
+        return lowestContributor;
     }
 
     private boolean checkValidBet(int amount) {
@@ -191,15 +230,13 @@ public class Hand {
     }
 
     private void checkNoMoreAction() {
+        int streetBet = playersInHand.get(0).amountThisStreet;
         for (Player player : playersInHand) {
-            if (player.actions[street].isEmpty()) {
+            if (player.amountThisStreet != streetBet) {
                 return;
-            } else {
-                if (player.amountThisStreet != currentBet) {
-                    return;
-                }
             }
         }
+
         nextStreet();
     }
 

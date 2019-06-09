@@ -29,8 +29,12 @@ public class HandActivity extends AppCompatActivity {
                 .get(MainActivity.game.currentHand.currentPlayer).chips));
 
         //Pot Total
+        String potString = "";
+        for (int i = 0; i < MainActivity.game.currentHand.pots.size() - 1; i++) {
+            potString += (MainActivity.game.currentHand.pots.get(i).getTotal() + " + ");
+        }
         TextView potDisplay = findViewById(R.id.potTotal);
-        potDisplay.setText(Integer.toString(MainActivity.game.currentHand.pot));
+        potDisplay.setText(potString);
 
         //Check/Fold button
         Button checkFoldButton = findViewById(R.id.checkButton);

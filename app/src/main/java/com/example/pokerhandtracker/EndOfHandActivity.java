@@ -41,7 +41,7 @@ public class EndOfHandActivity extends AppCompatActivity {
                     for (Player player : hand.playersInHand) {
                         if (player == MainActivity.game.players.get(
                                 Integer.parseInt(handWinner.getText().toString()) - 1)) {
-                            MainActivity.game.pushPot(player);
+                            MainActivity.game.pushPot(player, 0);
                         }
                     }
 
