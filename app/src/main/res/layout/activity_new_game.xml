@@ -61,7 +61,7 @@
                 android:ems="10"
                 android:hint="@string/name"
                 android:inputType="textPersonName"
-                android:text="Sura" />
+                android:text="Player 1" />
 
             <EditText
                 android:id="@+id/seat1Stack"
@@ -70,7 +70,7 @@
                 android:ems="10"
                 android:hint="Stack"
                 android:inputType="number"
-                android:text="100000" />
+                android:text="400" />
 
         </TableRow>
 
@@ -95,7 +95,7 @@
                 android:ems="10"
                 android:hint="@string/name"
                 android:inputType="textPersonName"
-                android:text="Daniel" />
+                android:text="Player 2" />
 
             <EditText
                 android:id="@+id/seat2Stack"
@@ -104,7 +104,7 @@
                 android:ems="10"
                 android:hint="@string/stack"
                 android:inputType="number"
-                android:text="200000" />
+                android:text="2000" />
 
         </TableRow>
 
@@ -129,7 +129,7 @@
                 android:ems="10"
                 android:hint="@string/name"
                 android:inputType="textPersonName"
-                android:text="Seiver" />
+                android:text="Player 3" />
 
             <EditText
                 android:id="@+id/seat3Stack"
@@ -138,7 +138,7 @@
                 android:ems="10"
                 android:hint="@string/stack"
                 android:inputType="number"
-                android:text="100000" />
+                android:text="3000" />
 
         </TableRow>
 
@@ -163,7 +163,7 @@
                 android:ems="10"
                 android:hint="@string/name"
                 android:inputType="textPersonName"
-                android:text="Tony" />
+                android:text="Player 4" />
 
             <EditText
                 android:id="@+id/seat4Stack"
@@ -172,7 +172,7 @@
                 android:ems="10"
                 android:hint="@string/stack"
                 android:inputType="number"
-                android:text="250000" />
+                android:text="2000" />
 
         </TableRow>
 
@@ -196,8 +196,7 @@
                 android:layout_marginRight="10sp"
                 android:ems="10"
                 android:hint="@string/name"
-                android:inputType="textPersonName"
-                android:text="Viffer" />
+                android:inputType="textPersonName" />
 
             <EditText
                 android:id="@+id/seat5Stack"
@@ -205,8 +204,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/stack"
-                android:inputType="number"
-                android:text="100000" />
+                android:inputType="number" />
 
         </TableRow>
 
@@ -230,8 +228,7 @@
                 android:layout_marginRight="10sp"
                 android:ems="10"
                 android:hint="@string/name"
-                android:inputType="textPersonName"
-                android:text="Cannon" />
+                android:inputType="textPersonName" />
 
             <EditText
                 android:id="@+id/seat6Stack"
@@ -239,8 +236,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/stack"
-                android:inputType="number"
-                android:text="100000" />
+                android:inputType="number" />
 
         </TableRow>
 

@@ -30,8 +30,11 @@ public class HandActivity extends AppCompatActivity {
 
         //Pot Total
         String potString = "";
-        for (int i = 0; i < MainActivity.game.currentHand.pots.size() - 1; i++) {
-            potString += (MainActivity.game.currentHand.pots.get(i).getTotal() + " + ");
+        for (int i = 0; i < MainActivity.game.currentHand.pots.size(); i++) {
+            potString += MainActivity.game.currentHand.pots.get(i).getTotal();
+            if (i != MainActivity.game.currentHand.pots.size() - 1) {
+                potString += " + ";
+            }
         }
         TextView potDisplay = findViewById(R.id.potTotal);
         potDisplay.setText(potString);

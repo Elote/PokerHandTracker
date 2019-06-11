@@ -1,12 +1,15 @@
 package com.example.pokerhandtracker;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Hand {
     List<Player> playersInHand;
     int allInPlayers = 0;
+    int newStreetPlayerCount = 0;
     int currentPlayer = 3;
 
     int smallBlind = 5; //hardcoded
@@ -42,6 +45,8 @@ public class Hand {
         mainPot.playerContribution.put(playersInHand.get(1), smallBlind);
         mainPot.playerContribution.put(playersInHand.get(2), bigBlind);
         pots.add(mainPot);
+
+        newStreetPlayerCount = playersInHand.size();
     }
 
     public void checkFold() {
@@ -80,6 +85,7 @@ public class Hand {
         if (currentBet - player.amountThisStreet > player.chips) {
             player.amountThisStreet += player.chips;
             actions.add(new Call(player, true));
+            player.isAllIn = true;
         } else {
             player.amountThisStreet = currentBet;
             actions.add(new Call(player, false));
@@ -102,6 +108,7 @@ public class Hand {
         player.amountThisStreet = amount;
         if (player.amountThisStreet - player.chips == 0) {
             actions.add(new Bet(amount, player, true));
+            player.isAllIn = true;
         } else {
             actions.add(new Bet(amount, player, false));
         }
@@ -137,7 +144,7 @@ public class Hand {
                     betMap.put(player, player.chips);
                 }
             } else if (action instanceof Check || action instanceof Fold) {
-                return;
+                continue;
             }
         }
 
@@ -161,18 +168,11 @@ public class Hand {
                 pots.add(sidePot);
             }
         }
-
-        actions.clear();
     }
 
     private boolean checkPotIsEqual(Pot pot) {
-        int amount = pot.playerContribution.get(0);
-        for (Player p : pot.playerContribution.keySet()) {
-            if (pot.playerContribution.get(p) != amount) {
-                return false;
-            }
-        }
-        return true;
+        Set<Integer> values = new HashSet<>(pot.playerContribution.values());
+        return values.size() == 1;
     }
 
     private Player getLowestContribution(Pot pot) {
@@ -208,23 +208,28 @@ public class Hand {
         } else {
             currentPlayer++;
         }
+
+        if (playersInHand.get(currentPlayer).isAllIn) {
+            cyclePlayer();
+        }
     }
 
     private void checkNoMoreAction() {
         int checkCount = 0;
         int callCount = 0;
-        int callsRequired = playersInHand.size() - 1;
+        int checksRequired = newStreetPlayerCount;
+        int callsRequired = newStreetPlayerCount - 1;
         int allInPlayers = this.allInPlayers;
         boolean aggressorAllIn = false;
-        boolean cannotLimp = true;
+        boolean bigBlindCheck = false;
 
         if (street == 0) {
-            cannotLimp = false;
+            bigBlindCheck = true;
         }
 
         for (Action action : actions) {
             if (action instanceof Bet) {
-                cannotLimp = true;
+                bigBlindCheck = false;
                 if (((Bet) action).allIn) {
                     if (aggressorAllIn) {
                         allInPlayers++;
@@ -246,20 +251,17 @@ public class Hand {
                 checkCount++;
             } else if (action instanceof Fold) {
                 callsRequired--;
-                if (action != actions.get(actions.size() - 1)) {
-                    callsRequired++;
-                    if (playersInHand.get(playersInHand.size() - 1) != ((Fold) action).player) {
-                        return;
-                    }
-                }
             }
 
-            if (!cannotLimp) {
+            if (bigBlindCheck) {
                 if (callCount == callsRequired && checkCount == 1) {
                     nextStreet();
                 }
-            } else if (callCount == callsRequired - allInPlayers || checkCount == callsRequired + 1 - allInPlayers) {
+            } else if (callCount == callsRequired - allInPlayers || checkCount == checksRequired - allInPlayers) {
                 nextStreet();
+                if (aggressorAllIn) {
+                    allInPlayers++;
+                }
                 this.allInPlayers = allInPlayers;
             }
         }
@@ -272,6 +274,7 @@ public class Hand {
     }
 
     private void nextStreet() {
+        computeStreet();
         street++;
         if (street == 4) {
             MainActivity.game.endHand();
@@ -284,5 +287,7 @@ public class Hand {
             currentPlayer = 0;
         }
         currentBet = 0;
+        newStreetPlayerCount = playersInHand.size();
+        actions.clear();
     }
 }

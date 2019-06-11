@@ -7,6 +7,10 @@ public class Pot {
     Map<Player, Integer> playerContribution = new HashMap<>();
 
     public int getTotal() {
-        return playerContribution.get(0) * playerContribution.size();
+        int total = 0;
+        for (Player player : playerContribution.keySet()) {
+            total += playerContribution.get(player);
+        }
+        return total;
     }
 }
