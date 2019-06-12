@@ -38,17 +38,37 @@ public class EndOfHandActivity extends AppCompatActivity {
                 Hand hand = MainActivity.game.prevHands.get(MainActivity.game.prevHands.size() - 1);
 
                 if (handWinner.getText().toString() != "") {
-                    for (Player player : hand.playersInHand) {
-                        if (player == MainActivity.game.players.get(
-                                Integer.parseInt(handWinner.getText().toString()) - 1)) {
-                            MainActivity.game.pushPot(player, 0);
+                    if (handWinner.getText().toString().length() > 1) {
+                        computePotWinners(hand, handWinner.getText().toString());
+                    } else {
+                        for (Player player : hand.playersInHand) {
+                            if (player == MainActivity.game.players.get(
+                                    Integer.parseInt(handWinner.getText().toString()) - 1)) {
+                                MainActivity.game.pushPot(player, 0);
+                            }
                         }
                     }
 
-                    Intent newHandActivity = new Intent(getApplicationContext(), HandActivity.class);
-                    startActivity(newHandActivity);
+                    Intent preHandOptions = new Intent(getApplicationContext(), PreHandOptionsActivity.class);
+                    startActivity(preHandOptions);
                 }
             }
         });
+    }
+
+    private void computePotWinners(Hand hand, String winners) {
+        winners = winners.substring(0, hand.pots.size());
+        for (char ch : winners.toCharArray()) {
+            Player player = MainActivity.game.players.get(Character.getNumericValue(ch));
+            for (int i = 0; i < hand.pots.size(); i++) {
+                Pot pot = hand.pots.get(i);
+                if (pot.playerContribution.containsKey(player)) {
+                    if (pot.winner == null) {
+                        pot.winner = player;
+                        MainActivity.game.pushPot(player, i);
+                    }
+                }
+            }
+        }
     }
 }

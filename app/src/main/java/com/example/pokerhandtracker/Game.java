@@ -30,7 +30,6 @@ public class Game {
     }
 
     public void pushPot(Player player, int potNum) {
-        prevHands.get(prevHands.size() - 1).winner = player;
         player.chips += prevHands.get(prevHands.size() - 1).pots.get(potNum).getTotal();
     }
 

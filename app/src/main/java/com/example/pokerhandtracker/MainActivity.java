@@ -9,6 +9,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     public static Game game;
+    public static String seatNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class Pot {
     Map<Player, Integer> playerContribution = new HashMap<>();
+    Player winner;
 
     public Pot() {
 

@@ -26,7 +26,6 @@ public class Hand {
     String river = "";
 
     boolean isOver = false;
-    Player winner;
 
     public Hand(List<Player> playersInHand) {
         this.playersInHand = playersInHand;
@@ -331,6 +330,7 @@ public class Hand {
             }
 
             player.chips = player.amountAtHandStart - totalContribution;
+            player.amountAtHandStart = player.chips;
         }
     }
 }
