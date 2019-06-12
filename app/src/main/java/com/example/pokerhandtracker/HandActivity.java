@@ -45,7 +45,7 @@ public class HandActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Hand hand = MainActivity.game.currentHand;
-                int street = hand.street;
+                int street = MainActivity.game.currentHand.street;
 
                 hand.checkFold();
 
@@ -67,11 +67,15 @@ public class HandActivity extends AppCompatActivity {
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Hand hand = MainActivity.game.currentHand;
                 int street = MainActivity.game.currentHand.street;
 
                 MainActivity.game.currentHand.call();
 
-                if (street == MainActivity.game.currentHand.street) {
+                if (hand.isOver) {
+                    Intent endOfHand = new Intent(getApplicationContext(), EndOfHandActivity.class);
+                    startActivity(endOfHand);
+                } else if (street == MainActivity.game.currentHand.street) {
                     Intent nextPlayerHand = new Intent(getApplicationContext(), HandActivity.class);
                     startActivity(nextPlayerHand);
                 } else {
@@ -100,7 +104,6 @@ public class HandActivity extends AppCompatActivity {
                     Intent nextStreet = new Intent(getApplicationContext(), NextStreetActivity.class);
                     startActivity(nextStreet);
                 }
-                EditText amount = findViewById(R.id.betAmount);
             }
         });
     }

@@ -82,7 +82,7 @@ public class Hand {
 
         Player player = playersInHand.get(currentPlayer);
 
-        if (currentBet - player.amountThisStreet > player.chips) {
+        if (currentBet - player.amountThisStreet >= player.chips) {
             player.amountThisStreet += player.chips;
             actions.add(new Call(player, true));
             player.isAllIn = true;
@@ -122,12 +122,13 @@ public class Hand {
         for (int i = 0; i < actions.size(); i++) {
             Action action = actions.get(i);
             Pot lastPot = pots.get(pots.size() - 1);
+            Pot copyOfLastPot = new Pot(lastPot);
             Map<Player, Integer> betMap = lastPot.playerContribution;
 
             if (action instanceof Bet) {
                 Player player = ((Bet) action).player;
 
-                betMap.put(player, ((Bet) action).amount);
+                betMap.put(player, ((Bet) action).amount + copyOfLastPot.playerContribution.get(player));
             } else if (action instanceof Call) {
                 Player player = ((Call) action).player;
 
@@ -138,10 +139,10 @@ public class Hand {
                     }
                 }
 
-                if (player.chips > highestContribution) {
+                if (player.chips > highestContribution - copyOfLastPot.playerContribution.get(player)) {
                     betMap.put(player, highestContribution);
                 } else {
-                    betMap.put(player, player.chips);
+                    betMap.put(player, player.chips + copyOfLastPot.playerContribution.get(player));
                 }
             } else if (action instanceof Check || action instanceof Fold) {
                 continue;
@@ -171,7 +172,14 @@ public class Hand {
     }
 
     private boolean checkPotIsEqual(Pot pot) {
-        Set<Integer> values = new HashSet<>(pot.playerContribution.values());
+        Pot copyOfPot = new Pot(pot);
+        for (Player player : pot.playerContribution.keySet()) {
+            if (!playersInHand.contains(player)) {
+                copyOfPot.playerContribution.remove(player);
+            }
+        }
+
+        Set<Integer> values = new HashSet<>(copyOfPot.playerContribution.values());
         return values.size() == 1;
     }
 
@@ -180,8 +188,10 @@ public class Hand {
         int lowestContribution = Integer.MAX_VALUE;
         for (Player p : pot.playerContribution.keySet()) {
             if (lowestContribution > pot.playerContribution.get(p)) {
-                lowestContribution = pot.playerContribution.get(p);
-                lowestContributor = p;
+                if (playersInHand.contains(p)) {
+                    lowestContribution = pot.playerContribution.get(p);
+                    lowestContributor = p;
+                }
             }
         }
         return lowestContributor;
@@ -210,8 +220,27 @@ public class Hand {
         }
 
         if (playersInHand.get(currentPlayer).isAllIn) {
+            if (checkAllPlayersAllIn()) {
+                return;
+            }
             cyclePlayer();
         }
+    }
+
+    private boolean checkAllPlayersAllIn() {
+        int allInCount = 0;
+        for (int i = 0; i < playersInHand.size(); i++) {
+            if (playersInHand.get(i).isAllIn) {
+                allInCount++;
+            }
+        }
+
+        if (allInCount == playersInHand.size() - 1) {
+            MainActivity.game.endHand();
+            return true;
+        }
+
+        return false;
     }
 
     private void checkNoMoreAction() {
@@ -275,6 +304,7 @@ public class Hand {
 
     private void nextStreet() {
         computeStreet();
+        updatePlayerStacks();
         street++;
         if (street == 4) {
             MainActivity.game.endHand();
@@ -289,5 +319,18 @@ public class Hand {
         currentBet = 0;
         newStreetPlayerCount = playersInHand.size();
         actions.clear();
+    }
+
+    private void updatePlayerStacks() {
+        for (Player player : playersInHand) {
+            int totalContribution = 0;
+            for (Pot pot : pots) {
+                if (pot.playerContribution.containsKey(player)) {
+                    totalContribution += pot.playerContribution.get(player);
+                }
+            }
+
+            player.chips = player.amountAtHandStart - totalContribution;
+        }
     }
 }
