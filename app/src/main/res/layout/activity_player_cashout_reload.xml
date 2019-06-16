@@ -14,14 +14,14 @@
         android:layout_marginLeft="87dp"
         android:layout_marginEnd="88dp"
         android:layout_marginRight="88dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="52dp"
         android:ems="10"
         android:gravity="center"
         android:hint="Amount"
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/backButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.468"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -32,11 +32,11 @@
         android:layout_marginLeft="152dp"
         android:layout_marginEnd="153dp"
         android:layout_marginRight="153dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="44dp"
         android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -47,11 +47,11 @@
         android:layout_marginLeft="103dp"
         android:layout_marginEnd="103dp"
         android:layout_marginRight="103dp"
-        android:layout_marginBottom="61dp"
+        android:layout_marginBottom="44dp"
         android:text="Cash Out"
         app:layout_constraintBottom_toTopOf="@+id/playerReload"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -62,42 +62,28 @@
         android:layout_marginLeft="103dp"
         android:layout_marginEnd="103dp"
         android:layout_marginRight="103dp"
-        android:layout_marginBottom="59dp"
+        android:layout_marginBottom="56dp"
         android:text="Reload"
         app:layout_constraintBottom_toTopOf="@+id/cashoutAmount"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/cashoutDisplayStack"
         android:layout_width="98dp"
         android:layout_height="35dp"
-        android:layout_marginEnd="148dp"
-        android:layout_marginRight="148dp"
-        android:layout_marginBottom="79dp"
+        android:layout_marginStart="131dp"
+        android:layout_marginLeft="131dp"
+        android:layout_marginEnd="131dp"
+        android:layout_marginRight="131dp"
+        android:layout_marginBottom="48dp"
         android:gravity="center"
         android:text="TextView"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/playerCashout"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="Stack " />
-
-    <TextView
-        android:layout_width="98dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="29dp"
-        android:layout_marginRight="29dp"
-        android:gravity="center"
-        android:text="Stack"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toStartOf="@+id/cashoutDisplayStack"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="Stack " />
 
     <TextView

@@ -41,6 +41,5 @@ public class Game {
             button++;
         }
         prevHands.add(currentHand);
-        newHand();
     }
 }

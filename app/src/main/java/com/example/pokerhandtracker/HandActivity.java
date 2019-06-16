@@ -94,7 +94,7 @@ public class HandActivity extends AppCompatActivity {
 
                 if (street == MainActivity.game.currentHand.street) {
                     EditText amount = findViewById(R.id.betAmount);
-                    if (amount.getText().toString() != "") {
+                    if (!amount.getText().toString().equals("")) {
                         MainActivity.game.currentHand.betRaise(Integer.parseInt(amount.getText().toString()));
 
                         Intent nextPlayerHand = new Intent(getApplicationContext(), HandActivity.class);

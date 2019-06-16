@@ -24,7 +24,7 @@ public class PlayerCashoutReloadActivity extends AppCompatActivity {
         player.setText(cashoutPlayer.name);
 
         TextView playerStack = findViewById(R.id.cashoutDisplayStack);
-        playerStack.setText(cashoutPlayer.chips);
+        playerStack.setText(Integer.toString(cashoutPlayer.chips));
 
         final Button cashout = findViewById(R.id.playerCashout);
         cashout.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +43,7 @@ public class PlayerCashoutReloadActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText amount = findViewById(R.id.cashoutAmount);
 
-                if (amount.getText().toString() != "") {
+                if (!amount.getText().toString().equals("")) {
                     cashoutPlayer.chips += Integer.parseInt(amount.getText().toString());
                     cashoutPlayer.amountAtHandStart = cashoutPlayer.chips;
 

@@ -32,11 +32,35 @@ public class PreHandOptionsActivity extends AppCompatActivity {
                 EditText seatNum = findViewById(R.id.postSeatNum);
                 MainActivity.seatNum = seatNum.getText().toString();
 
-                if (seatNum.getText().toString() != "") {
+                if (!seatNum.getText().toString().equals("")) {
                     Intent newCashoutReload = new Intent(getApplicationContext(), PlayerCashoutReloadActivity.class);
                     startActivity(newCashoutReload);
                 }
             }
         });
+
+        Button next = findViewById(R.id.postNextHand);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.game.newHand();
+                Intent nextPlayerHand = new Intent(getApplicationContext(), HandActivity.class);
+                startActivity(nextPlayerHand);
+            }
+        });
+
+        checkPlayerBust();
+    }
+
+    private void checkPlayerBust() {
+        for (int i = 0; i < MainActivity.game.players.size(); i++) {
+            if (MainActivity.game.players.get(i).chips == 0) {
+                MainActivity.seatNum = Integer.toString(i);
+
+                Intent newCashoutReload = new Intent(getApplicationContext(), PlayerCashoutReloadActivity.class);
+                startActivity(newCashoutReload);
+                break;
+            }
+        }
     }
 }

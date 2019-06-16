@@ -23,7 +23,7 @@ public class NextStreetActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EditText cards = findViewById(R.id.communityCards);
-                if (cards.getText().toString() != "") {
+                if (!cards.getText().toString().equals("")) {
                     switch (MainActivity.game.currentHand.street) {
                         case 1:
                             MainActivity.game.currentHand.flop = cards.getText().toString();

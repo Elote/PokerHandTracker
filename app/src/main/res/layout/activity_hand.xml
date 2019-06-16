@@ -43,11 +43,12 @@
         android:layout_height="53dp"
         android:layout_marginStart="118dp"
         android:layout_marginLeft="118dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="118dp"
         android:layout_marginRight="118dp"
         android:text="Call"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkButton" />
 
@@ -57,11 +58,12 @@
         android:layout_height="53dp"
         android:layout_marginStart="117dp"
         android:layout_marginLeft="117dp"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="96dp"
         android:layout_marginEnd="118dp"
         android:layout_marginRight="118dp"
         android:text="Check/Fold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.468"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerDisplayStack" />
 

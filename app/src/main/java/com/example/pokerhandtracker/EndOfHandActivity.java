@@ -37,7 +37,7 @@ public class EndOfHandActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Hand hand = MainActivity.game.prevHands.get(MainActivity.game.prevHands.size() - 1);
 
-                if (handWinner.getText().toString() != "") {
+                if (!handWinner.getText().toString().equals("")) {
                     if (handWinner.getText().toString().length() > 1) {
                         computePotWinners(hand, handWinner.getText().toString());
                     } else {
